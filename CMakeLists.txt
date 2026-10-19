@@ -78,3 +78,10 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.hex
     COMMENT "Creating Intel HEX image"
 )
+
+# CLion run configuration target: build the firmware without trying to run the
+# Cortex-M ELF as a native Linux executable.
+add_custom_target(compile_firmware
+    DEPENDS ${PROJECT_NAME}
+    COMMENT "Firmware build completed: ${PROJECT_NAME}.elf and .hex"
+)
