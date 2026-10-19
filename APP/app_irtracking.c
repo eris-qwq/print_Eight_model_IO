@@ -101,8 +101,8 @@ void LineWalking(void)
     static uint8_t report_counter = 0U;
     const IRTrackingState state = IRTracking_Compute(IRTracking_ReadRaw());
 
-    Motor_Set_Pwm(Motor_M1, IR_TRACKING_L1_FORWARD_SIGN * state.left_pwm);
-    Motor_Set_Pwm(Motor_M3, IR_TRACKING_R1_FORWARD_SIGN * state.right_pwm);
+    // Motor_Set_Pwm(Motor_M1, IR_TRACKING_L1_FORWARD_SIGN * state.left_pwm);
+    // Motor_Set_Pwm(Motor_M3, IR_TRACKING_R1_FORWARD_SIGN * state.right_pwm);
 
     if (++report_counter >= IR_TRACKING_REPORT_EVERY) {
         report_counter = 0U;

@@ -39,8 +39,8 @@ void app_main(void)
     }
 
     /* Task creation or scheduler startup failed. Do not leave a motor active. */
-    Motor_Set_Pwm(Motor_M1, 0);
-    Motor_Set_Pwm(Motor_M3, 0);
+    //Motor_Set_Pwm(Motor_M1, 0);
+    //Motor_Set_Pwm(Motor_M3, 0);
 }
 
 void vApplicationMallocFailedHook(void)
