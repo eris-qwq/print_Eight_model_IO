@@ -29,23 +29,33 @@ if(NOT EXISTS "${driverlib}")
     message(FATAL_ERROR "Missing MSPM0G3507 DriverLib: ${driverlib}")
 endif()
 
+set(freertos_root "${MSPM0_SDK_DIR}/kernel/freertos")
+if(NOT EXISTS "${freertos_root}/Source/include/FreeRTOS.h")
+    message(FATAL_ERROR "The selected MSPM0 SDK does not contain FreeRTOS: ${freertos_root}")
+endif()
+
 add_executable(${PROJECT_NAME}
     gcc/startup_mspm0g350x_gcc.c
     gcc/assert_handler.c
     Core/Src/ti_msp_dl_config.c
     Core/Src/main.c
     Task/app_main.c
+    ${freertos_root}/Source/tasks.c
+    ${freertos_root}/Source/list.c
+    ${freertos_root}/Source/portable/MemMang/heap_4.c
+    ${freertos_root}/Source/portable/GCC/ARM_CM0/port.c
     APP/app_irtracking.c
     APP/app_motor.c
     APP/app_usart.c
     BSP/bsp_at8236.c
-    BSP/bsp_delay.c
     BSP/bsp_enconder.c
     BSP/bsp_usart.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     . Core/Inc APP BSP Task
+    "${freertos_root}/Source/include"
+    "${freertos_root}/Source/portable/GCC/ARM_CM0"
     "${MSPM0_SDK_DIR}/source"
     "${MSPM0_SDK_DIR}/source/third_party/CMSIS/Core/Include"
 )

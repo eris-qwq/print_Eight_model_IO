@@ -6,7 +6,7 @@ int main(void)
     SYSCFG_DL_init();
     app_main();
 
-    /* app_main() runs forever; keep the CPU safe if it ever returns. */
+    /* The scheduler only returns when it cannot start. Keep the motors safe. */
     while (1) {
     }
 }

@@ -1,13 +1,13 @@
 # 八路红外双电机寻迹工程（MSPM0G3507）
 
-此工程使用 MSPM0G3507、八路数字红外模块与 L1/R1 两个直流电机寻迹。上电后等待 1 秒，随后每 20 ms 读取一次 X1～X8；根据黑线位置调节左右轮 PWM，每 100 ms 经 UART0（115200、8N1）发送一次采样和电机状态。
+此工程使用 MSPM0G3507、FreeRTOS、八路数字红外模块与 L1/R1 两个直流电机寻迹。上电后等待 1 秒，随后 `LineTrackingTask` 每 20 ms 读取一次 X1～X8；根据黑线位置调节左右轮 PWM，每 100 ms 经 UART0（115200、8N1）发送一次采样和电机状态。
 
 ## 目录职责
 
 | 路径 | 职责 |
 | --- | --- |
 | `Core/Inc`, `Core/Src` | 芯片入口和 SysConfig 生成的外设初始化代码。`Core/Src/main.c` 只初始化硬件并进入应用。 |
-| Task | 寻迹主循环，位于 Task/app_main.c。 |
+| Task | FreeRTOS 任务创建与调度入口，当前只创建已有实现支撑的 `LineTrackingTask`。 |
 | APP | 八路红外采样与双轮差速寻迹；其他旧应用模块保留。 |
 | BSP | SysTick 延时、UART、电机驱动等板级代码。 |
 | `empty.syscfg` | SysConfig 的引脚与外设配置源文件；生成结果放在 `Core` 中。 |
@@ -17,7 +17,15 @@
 | `Legacy/Event.dot` | 原工程遗留的独立 Graphviz 图文件，不参与固件构建。 |
 | `OBJ` | 原工程留下的 HEX 文件；新 GCC 构建产物在 `build/<配置>/`。 |
 
-当前调用链：Core/Src/main.c → Task/app_main.c → APP/app_irtracking.c → BSP/bsp_at8236.c 和 BSP/bsp_usart.c。红外 X1～X8 按从左到右的顺序对应 PA28、PA31、PA2、PB24、PB20、PB19、PB18、PA7。UART0 TX/RX 对应 PA10/PA11。
+当前调用链：Core/Src/main.c → Task/app_main.c 创建 `LineTrackingTask` → APP/app_irtracking.c → BSP/bsp_at8236.c 和 BSP/bsp_usart.c。红外 X1～X8 按从左到右的顺序对应 PA28、PA31、PA2、PB24、PB20、PB19、PB18、PA7。UART0 TX/RX 对应 PA10/PA11。
+
+## FreeRTOS 任务
+
+| 任务 | 周期 | 优先级 | 当前职责 |
+| --- | --- | --- | --- |
+| `LineTrackingTask` | 20 ms | `tskIDLE_PRIORITY + 2` | 八路红外采样、循迹误差计算、L1/R1 PWM 输出、每 100 ms 串口上报 |
+
+视觉、底盘 IMU、云台 IMU 和云台电机尚无实际驱动或协议代码，因此当前不创建占位任务。后续每完成一个驱动模块，再将对应周期任务接入 `Task/app_main.c`。
 
 ## 寻迹与接线
 
@@ -44,7 +52,7 @@ IR 是 X1～X8 的原始 0/1 电平；VALID 表示是否检测到黑线；ERR �
 
 ## GCC 构建
 
-需要 CMake、Ninja、`arm-none-eabi-gcc`、`arm-none-eabi-objcopy` 和 TI MSPM0 SDK。构建脚本优先使用 `MSPM0_SDK_DIR` 环境变量；未设置时，在 `~/.local/opt/ti/mspm0_sdk_*` 中查找。也可以通过 CMake 参数指定 SDK：
+需要 CMake、Ninja、`arm-none-eabi-gcc`、`arm-none-eabi-objcopy` 和包含 `kernel/freertos` 的 TI MSPM0 SDK。构建脚本优先使用 `MSPM0_SDK_DIR` 环境变量；未设置时，在 `~/.local/opt/ti/mspm0_sdk_*` 中查找。也可以通过 CMake 参数指定 SDK：
 
 ```sh
 cmake --preset Debug -DMSPM0_SDK_DIR=/path/to/mspm0_sdk
