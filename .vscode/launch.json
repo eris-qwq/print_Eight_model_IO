@@ -6,7 +6,7 @@
     "configurations": [
         {
             "cwd": "${workspaceFolder}",
-            "executable": "./build/Debug/print_Eight_model_IO.elf",
+            "executable": "${workspaceFolder}/cmake-build-debug/print_Eight_model_IO.elf",
             "name": "Debug with JLink",
             "request": "launch",
             "type": "cortex-debug",

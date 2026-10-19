@@ -8,23 +8,23 @@ volatile int32_t gEncoderCount_R2 = 0;
  
 void GROUP1_IRQHandler(void)
 {
-    //»ñÈ¡ÖÐ¶ÏÐÅºÅ
+    //ï¿½ï¿½È¡ï¿½Ð¶ï¿½ï¿½Åºï¿½
     gpioA = DL_GPIO_getEnabledInterruptStatus(GPIOA,
     L1_Enconder_A_pin_14_PIN | L1_Enconder_B_pin_15_PIN|
 		L2_Enconder_A_pin_24_PIN|L2_Enconder_B_pin_25_PIN|
 		R1_Enconder_A_pin_8_PIN|R1_Enconder_B_pin_9_PIN|
 		R2_Enconder_A_pin_21_PIN|R2_Enconder_B_pin_22_PIN);
 	
-//-------------------------------------------------×ó±ßµç»ú----------------------------------------------- 
+//-------------------------------------------------ï¿½ï¿½ßµï¿½ï¿½----------------------------------------------- 
   //L1  
 	if((gpioA & L1_Enconder_A_pin_14_PIN) == L1_Enconder_A_pin_14_PIN)
 	{
-			//Pin14ÉÏÉýÑØ£¬¿´Pin15µÄµçÆ½£¬ÎªµÍµçÆ½ÔòÅÐ¶ÏÎª·´×ª£¬¸ßµçÆ½ÅÐ¶ÏÎªÕý×ª
-			if(!DL_GPIO_readPins(GPIOA,L1_Enconder_B_pin_15_PIN))//P15ÎªµÍµçÆ½
+			//Pin14ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½Pin15ï¿½Äµï¿½Æ½ï¿½ï¿½Îªï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ªï¿½ï¿½ï¿½ßµï¿½Æ½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ª
+			if(!DL_GPIO_readPins(GPIOA,L1_Enconder_B_pin_15_PIN))//P15Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_L1--;
 			}
-			else//P15Îª¸ßµçÆ½
+			else//P15Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_L1++;
 			}
@@ -32,12 +32,12 @@ void GROUP1_IRQHandler(void)
 	
 	else if((gpioA & L1_Enconder_B_pin_15_PIN) == L1_Enconder_B_pin_15_PIN)
 	{
-			//Pin15ÉÏÉýÑØ
-			if(!DL_GPIO_readPins(GPIOA,L1_Enconder_A_pin_14_PIN))//P14ÎªµÍµçÆ½
+			//Pin15ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if(!DL_GPIO_readPins(GPIOA,L1_Enconder_A_pin_14_PIN))//P14Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_L1++;
 			}
-			else//P14Îª¸ßµçÆ½
+			else//P14Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_L1--;
 			}
@@ -46,12 +46,12 @@ void GROUP1_IRQHandler(void)
 	//L2 
 	if((gpioA & L2_Enconder_A_pin_24_PIN) == L2_Enconder_A_pin_24_PIN)
 	{
-			//Pin24ÉÏÉýÑØ£¬¿´Pin25µÄµçÆ½£¬ÎªµÍµçÆ½ÔòÅÐ¶ÏÎª·´×ª£¬¸ßµçÆ½ÅÐ¶ÏÎªÕý×ª
-			if(!DL_GPIO_readPins(GPIOA,L2_Enconder_B_pin_25_PIN))//P25ÎªµÍµçÆ½
+			//Pin24ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½Pin25ï¿½Äµï¿½Æ½ï¿½ï¿½Îªï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ªï¿½ï¿½ï¿½ßµï¿½Æ½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ª
+			if(!DL_GPIO_readPins(GPIOA,L2_Enconder_B_pin_25_PIN))//P25Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_L2--;
 			}
-			else//P25Îª¸ßµçÆ½
+			else//P25Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_L2++;
 			}
@@ -59,27 +59,27 @@ void GROUP1_IRQHandler(void)
 	
 	else if((gpioA & L2_Enconder_B_pin_25_PIN) == L2_Enconder_B_pin_25_PIN)
 	{
-			//Pin25ÉÏÉýÑØ
-			if(!DL_GPIO_readPins(GPIOA,L2_Enconder_A_pin_24_PIN))//P24ÎªµÍµçÆ½
+			//Pin25ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if(!DL_GPIO_readPins(GPIOA,L2_Enconder_A_pin_24_PIN))//P24Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_L2++;
 			}
-			else//P24Îª¸ßµçÆ½
+			else//P24Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_L2--;
 			}
 	}
 	
-//------------------------------------------ÓÒ±ßµç»ú-----------------------------------------
+//------------------------------------------ï¿½Ò±ßµï¿½ï¿½-----------------------------------------
 	//R1
 	if((gpioA & R1_Enconder_A_pin_8_PIN) == R1_Enconder_A_pin_8_PIN)
 	{
-			//Pin8ÉÏÉýÑØ£¬¿´Pin9µÄµçÆ½£¬ÎªµÍµçÆ½ÔòÅÐ¶ÏÎª·´×ª£¬¸ßµçÆ½ÅÐ¶ÏÎªÕý×ª
-			if(!DL_GPIO_readPins(GPIOA,R1_Enconder_B_pin_9_PIN))//P9ÎªµÍµçÆ½
+			//Pin8ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½Pin9ï¿½Äµï¿½Æ½ï¿½ï¿½Îªï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ªï¿½ï¿½ï¿½ßµï¿½Æ½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ª
+			if(!DL_GPIO_readPins(GPIOA,R1_Enconder_B_pin_9_PIN))//P9Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_R1--;
 			}
-			else//P9Îª¸ßµçÆ½
+			else//P9Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_R1++;
 			}
@@ -87,12 +87,12 @@ void GROUP1_IRQHandler(void)
 	
 	else if((gpioA & R1_Enconder_B_pin_9_PIN) == R1_Enconder_B_pin_9_PIN)
 	{
-			//Pin9ÉÏÉýÑØ
-			if(!DL_GPIO_readPins(GPIOA,R1_Enconder_A_pin_8_PIN))//P8ÎªµÍµçÆ½
+			//Pin9ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if(!DL_GPIO_readPins(GPIOA,R1_Enconder_A_pin_8_PIN))//P8Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_R1++;
 			}
-			else//P8Îª¸ßµçÆ½
+			else//P8Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_R1--;
 			}
@@ -101,12 +101,12 @@ void GROUP1_IRQHandler(void)
 	//R2
 	if((gpioA & R2_Enconder_A_pin_21_PIN) == R2_Enconder_A_pin_21_PIN)
 	{
-			//Pin21ÉÏÉýÑØ£¬¿´Pin22µÄµçÆ½£¬ÎªµÍµçÆ½ÔòÅÐ¶ÏÎª·´×ª£¬¸ßµçÆ½ÅÐ¶ÏÎªÕý×ª
-			if(!DL_GPIO_readPins(GPIOA,R2_Enconder_B_pin_22_PIN))//P22ÎªµÍµçÆ½
+			//Pin21ï¿½ï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½ï¿½Pin22ï¿½Äµï¿½Æ½ï¿½ï¿½Îªï¿½Íµï¿½Æ½ï¿½ï¿½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ªï¿½ï¿½ï¿½ßµï¿½Æ½ï¿½Ð¶ï¿½Îªï¿½ï¿½×ª
+			if(!DL_GPIO_readPins(GPIOA,R2_Enconder_B_pin_22_PIN))//P22Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_R2--;
 			}
-			else//P22Îª¸ßµçÆ½
+			else//P22Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_R2++;
 			}
@@ -114,12 +114,12 @@ void GROUP1_IRQHandler(void)
 	
 	else if((gpioA & R2_Enconder_B_pin_22_PIN) == R2_Enconder_B_pin_22_PIN)
 	{
-			//Pin22ÉÏÉýÑØ
-			if(!DL_GPIO_readPins(GPIOA,R2_Enconder_A_pin_21_PIN))//P21ÎªµÍµçÆ½
+			//Pin22ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			if(!DL_GPIO_readPins(GPIOA,R2_Enconder_A_pin_21_PIN))//P21Îªï¿½Íµï¿½Æ½
 			{
 					gEncoderCount_R2++;
 			}
-			else//P21Îª¸ßµçÆ½
+			else//P21Îªï¿½ßµï¿½Æ½
 			{
 					gEncoderCount_R2--;
 			}
@@ -129,12 +129,12 @@ void GROUP1_IRQHandler(void)
 	
 	
     
-	//×îºóÇå³ýÖÐ¶Ï±êÖ¾Î»
-	//×óµç»ú
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï±ï¿½Ö¾Î»
+	//ï¿½ï¿½ï¿½ï¿½
 	DL_GPIO_clearInterruptStatus(GPIOA, L1_Enconder_A_pin_14_PIN|L1_Enconder_B_pin_15_PIN);
 	DL_GPIO_clearInterruptStatus(GPIOA, L2_Enconder_A_pin_24_PIN|L2_Enconder_B_pin_25_PIN);
 	
-	//ÓÒµç»ú
+	//ï¿½Òµï¿½ï¿½
 	DL_GPIO_clearInterruptStatus(GPIOA, R1_Enconder_A_pin_8_PIN|R1_Enconder_B_pin_9_PIN);
 	DL_GPIO_clearInterruptStatus(GPIOA, R2_Enconder_A_pin_21_PIN|R2_Enconder_B_pin_22_PIN);
 
