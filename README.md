@@ -63,7 +63,9 @@ cmake --build --preset Debug
 
 ## Keil 构建
 
-打开 `keil/print_Eight_model_IO.uvprojx`。安装 MSPM0G3507 器件包、ARM Compiler 6 和 TI MSPM0 SDK，并使环境变量 `MSPM0_SDK_DIR` 指向 SDK 根目录。项目的头文件路径和 DriverLib 库路径通过该变量引用 SDK。
+当前 FreeRTOS 接入已在 GCC/CMake 构建下验证。`keil/print_Eight_model_IO.uvprojx` 仍保留为历史裸机工程，尚未加入 FreeRTOS 内核源文件和 Cortex-M0+ 移植层，不应直接用于当前版本。
+
+如后续需要 Keil 构建，应安装 MSPM0G3507 器件包、ARM Compiler 6 和 TI MSPM0 SDK，并在 Keil 工程中补齐 FreeRTOS 内核、内存管理和 ARM Cortex-M0+ 端口后再编译。
 
 原项目的 SysConfig 构建前命令指向已不存在的 SDK 相对路径，现已禁用。修改 `empty.syscfg` 后，先用与工程匹配的 SysConfig 重新生成 `Core/Src/ti_msp_dl_config.c` 和 `Core/Inc/ti_msp_dl_config.h`，再编译。本仓库已有的生成文件可以直接用于当前配置。
 
