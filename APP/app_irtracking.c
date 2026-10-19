@@ -1,8 +1,12 @@
 #include "app_irtracking.h"
 
+#include "app_motor.h"
 #include "bsp_at8236.h"
 #include "bsp_usart.h"
 #include "ti_msp_dl_config.h"
+
+_Static_assert(ENCODER_RPM_SAMPLE_PERIOD_MS == IR_TRACKING_PERIOD_MS,
+    "Encoder RPM sample period must match LineWalking period");
 
 static int16_t clamp_pwm(int16_t pwm)
 {
@@ -100,9 +104,11 @@ void LineWalking(void)
 {
     static uint8_t report_counter = 0U;
     const IRTrackingState state = IRTracking_Compute(IRTracking_ReadRaw());
+    const motor_encoder_rpm_t motor_rpm = Encoder_Get_M1_M3_RPM();
+    (void)motor_rpm;
 
-    // Motor_Set_Pwm(Motor_M1, IR_TRACKING_L1_FORWARD_SIGN * state.left_pwm);
-    // Motor_Set_Pwm(Motor_M3, IR_TRACKING_R1_FORWARD_SIGN * state.right_pwm);
+    Motor_Set_Pwm(Motor_M1, IR_TRACKING_L1_FORWARD_SIGN * state.left_pwm);
+    Motor_Set_Pwm(Motor_M3, IR_TRACKING_R1_FORWARD_SIGN * state.right_pwm);
 
     if (++report_counter >= IR_TRACKING_REPORT_EVERY) {
         report_counter = 0U;

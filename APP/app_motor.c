@@ -1,5 +1,6 @@
 #include "app_motor.h"
 #include "bsp_at8236.h"
+#include "ti_msp_dl_config.h"
 
 
 extern volatile int32_t gEncoderCount_L1,gEncoderCount_L2;
@@ -14,6 +15,37 @@ int Encoder_speed_now[4] = {0};
 uint8_t g_start_ctrl = 0;
 car_data_t car_data;
 motor_data_t motor_data;
+
+/*
+ * Read motor 1/3 encoder increments and convert them to output-shaft RPM.
+ * The two counters are copied and cleared atomically because they are updated
+ * by GROUP1_IRQHandler().  L1 is negated to keep forward RPM positive on both
+ * sides, matching Encoder_Get_ALL().
+ */
+motor_encoder_rpm_t Encoder_Get_M1_M3_RPM(void)
+{
+    int32_t motor1_count;
+    int32_t motor3_count;
+    const uint32_t primask = __get_PRIMASK();
+
+    __disable_irq();
+    motor1_count = gEncoderCount_L1;
+    motor3_count = gEncoderCount_R1;
+    gEncoderCount_L1 = 0;
+    gEncoderCount_R1 = 0;
+    if (primask == 0U) {
+        __enable_irq();
+    }
+
+    const float count_to_rpm = 60000.0f /
+        (ENCODER_CIRCLE_450 * ENCODER_RPM_SAMPLE_PERIOD_MS);
+    motor_encoder_rpm_t rpm = {
+        .motor1_rpm = -(float)motor1_count * count_to_rpm,
+        .motor3_rpm =  (float)motor3_count * count_to_rpm,
+    };
+
+    return rpm;
+}
 
 // 读取本次采样周期内的四个轮子编码器增量，并清零累积计数。
 // 这里使用“增量法”来计算每个轮子的速度变化，避免累计误差。

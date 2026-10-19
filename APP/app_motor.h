@@ -15,6 +15,9 @@
 // 450RPM 时，电机转一圈对应的编码器脉冲数，计算方式：电机转速 × 轮周长 × 2 × 传动比（20*13*2）
 #define ENCODER_CIRCLE_450           (520.0f) // 1040
 
+/* LineWalking() samples motor 1 (L1) and motor 3 (R1) every 20 ms. */
+#define ENCODER_RPM_SAMPLE_PERIOD_MS (20U)
+
 // 小车轴距，左右轮中心距离之和的一半
 #define STM32Car_APB                  (150.0f)
 
@@ -43,6 +46,12 @@ typedef struct _motor_data_t
     int16_t speed_set[4];       // 目标速度设定值
 } motor_data_t;
 
+typedef struct
+{
+    float motor1_rpm;            /* Left wheel, L1: PA14/PA15 */
+    float motor3_rpm;            /* Right wheel, R1: PA8/PA9 */
+} motor_encoder_rpm_t;
+
 typedef struct _car_data
 {
     int16_t Vx;
@@ -53,6 +62,7 @@ typedef struct _car_data
 // 编码器相关函数
 void Encoder_Get_ALL(int* Encoder_all);
 void Motion_Get_Encoder(void);
+motor_encoder_rpm_t Encoder_Get_M1_M3_RPM(void);
 
 // PID相关函数
 void Motor_PID_Init(void);
