@@ -40,6 +40,7 @@ add_executable(${PROJECT_NAME}
     Core/Src/ti_msp_dl_config.c
     Core/Src/main.c
     Task/app_main.c
+    Task/app_chassis.c
     ${freertos_root}/Source/tasks.c
     ${freertos_root}/Source/list.c
     ${freertos_root}/Source/portable/MemMang/heap_4.c
