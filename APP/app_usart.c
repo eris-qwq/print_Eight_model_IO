@@ -9,14 +9,14 @@
 
 uint8_t rx_buff[Package_size];
 uint8_t new_package[Package_size];
-uint8_t g_new_package_flag = 0;//½ÓÊÕµ½ĞÂµÄÒ»°üÊı¾İ±êÖ¾
+uint8_t g_new_package_flag = 0;//æ¥æ”¶åˆ°æ–°çš„ä¸€åŒ…æ•°æ®æ ‡å¿—
 
-uint8_t IR_Data_number[IR_Num];//Êı×ÖÖµ
-uint16_t IR_Data_Anglo[IR_Num];//Ä£ÄâÖµ
-uint8_t g_Amode_Data = 0;//Ä£ÄâĞÍ±êÖ¾
-uint8_t g_Dmode_Data = 0;//Êı×ÖĞÍ±êÖ¾
+uint8_t IR_Data_number[IR_Num];//æ•°å­—å€¼
+uint16_t IR_Data_Anglo[IR_Num];//æ¨¡æ‹Ÿå€¼
+uint8_t g_Amode_Data = 0;//æ¨¡æ‹Ÿå‹æ ‡å¿—
+uint8_t g_Dmode_Data = 0;//æ•°å­—å‹æ ‡å¿—
 
-//Ñ°ÕÒ×Ö·ûĞÍÊı¾İ
+//å¯»æ‰¾å­—ç¬¦å‹æ•°æ®
 int StringFind(const char *pSrc, const char *pDst)  
 {  
     int i, j;  
@@ -43,7 +43,7 @@ void Deal_IR_Usart(uint8_t rxtemp)
   static uint8_t step = 0;
   if(rxtemp == '$')
   {  
-    g_start = 1;//¿ªÊ¼½ÓÊÕ±êÖ¾
+    g_start = 1;//å¼€å§‹æ¥æ”¶æ ‡å¿—
     rx_buff[step] = rxtemp;
     step++;
   }
@@ -57,20 +57,20 @@ void Deal_IR_Usart(uint8_t rxtemp)
     {
       rx_buff[step] = rxtemp;
       step ++;
-      if(rxtemp == '#')//½áÊø
+      if(rxtemp == '#')//ç»“æŸ
       {
         g_start = 0;
         step = 0;
-        memcpy(new_package,rx_buff,Package_size);//¸³Öµ
+        memcpy(new_package,rx_buff,Package_size);//èµ‹å€¼
         g_new_package_flag = 1;
-        memset(rx_buff,0,Package_size);//Çå¿ÕÊı¾İ
+        memset(rx_buff,0,Package_size);//æ¸…ç©ºæ•°æ®
       }
       
-      if(step >= Package_size)//Êı¾İÒì³£
+      if(step >= Package_size)//æ•°æ®å¼‚å¸¸
       {
         g_start = 0;
         step = 0;
-        memset(rx_buff,0,Package_size);//Çå¿ÕÊı¾İ
+        memset(rx_buff,0,Package_size);//æ¸…ç©ºæ•°æ®
       }
     }
   }
@@ -80,7 +80,7 @@ void Deal_IR_Usart(uint8_t rxtemp)
 void send_control_data(uint8_t adjust,uint8_t aData,uint8_t dData)
 {
 	uint8_t send_buf[8] = "$0,0,0#";
-	if(adjust == 1)//Ğ£×¼ÃüÁî
+	if(adjust == 1)//æ ¡å‡†å‘½ä»¤
 	{
 		send_buf[1] = '1';
 	}
@@ -88,7 +88,7 @@ void send_control_data(uint8_t adjust,uint8_t aData,uint8_t dData)
 	{
 		send_buf[1] = '0';
 	}
-	if(aData == 1)//Ä£ÄâÖµÊı¾İ
+	if(aData == 1)//æ¨¡æ‹Ÿå€¼æ•°æ®
 	{
 		send_buf[3] = '1';
 		g_Amode_Data = 1;
@@ -98,7 +98,7 @@ void send_control_data(uint8_t adjust,uint8_t aData,uint8_t dData)
 		send_buf[3] = '0';
 		g_Amode_Data = 0;
 	}
-	if(dData == 1)//Êı×ÖÖµÊı¾İ
+	if(dData == 1)//æ•°å­—å€¼æ•°æ®
 	{
 		send_buf[5] = '1';
 		g_Dmode_Data = 1;
@@ -114,32 +114,32 @@ void send_control_data(uint8_t adjust,uint8_t aData,uint8_t dData)
 	
 }
 
-//Êı¾İÀı×Ó£º$D,x1:0,x2:0,x3:0,x4:0,x5:0,x6:0,x7:0,x8:0#
-void Deal_Usart_Data(void) //´¦ÀíÊı×ÖĞÍÊı¾İ
+//æ•°æ®ä¾‹å­ï¼š$D,x1:0,x2:0,x3:0,x4:0,x5:0,x6:0,x7:0,x8:0#
+void Deal_Usart_Data(void) //å¤„ç†æ•°å­—å‹æ•°æ®
 {
 	if(new_package[1]!='D')
 	{
-		return; //´Ë°üÊı¾İ²»ÊÇÊı×ÖĞÍÊı¾İ
+		return; //æ­¤åŒ…æ•°æ®ä¸æ˜¯æ•°å­—å‹æ•°æ®
 	}
 	for(uint8_t i = 0;i<IR_Num;i++)
 	{
-		IR_Data_number[i] = (new_package[6+i*5]-'0');//°Ñ×Ö·û×ª³ÉÊı×Ö
+		IR_Data_number[i] = (new_package[6+i*5]-'0');//æŠŠå­—ç¬¦è½¬æˆæ•°å­—
 	}
 	
-	memset(new_package,0,Package_size);//Çå³ı¾ÉÊı¾İ
+	memset(new_package,0,Package_size);//æ¸…é™¤æ—§æ•°æ®
   
 }
 
 
 
 
-//---------------------------Ä£ÄâÖµ´¦ÀíÏà¹ØµÄ---------------------------
+//---------------------------æ¨¡æ‹Ÿå€¼å¤„ç†ç›¸å…³çš„---------------------------
 
 
-//´«Èë²ÎÊı£º±£ÁôµÄ×Ö·û´®(Ö¸ÕëÊı×é)  Ô­Ê¼×Ö·û´®  ·Ö¸ô·ûºÅ
+//ä¼ å…¥å‚æ•°ï¼šä¿ç•™çš„å­—ç¬¦ä¸²(æŒ‡é’ˆæ•°ç»„)  åŸå§‹å­—ç¬¦ä¸²  åˆ†éš”ç¬¦å·
 void splitString(char* mystrArray[],char *str, const char *delimiter) 
 {
-    char *token = strtok(str, delimiter); //ÕâÊÇµÚÒ»´Î·Ö¸î,²»»á±£ÁôµÚÒ»¸ö×Ö·ûÖµ
+    char *token = strtok(str, delimiter); //è¿™æ˜¯ç¬¬ä¸€æ¬¡åˆ†å‰²,ä¸ä¼šä¿ç•™ç¬¬ä¸€ä¸ªå­—ç¬¦å€¼
     int i =0;
     while (token != NULL) 
     {
@@ -149,19 +149,19 @@ void splitString(char* mystrArray[],char *str, const char *delimiter)
     }
 }
 
-void Deal_Usart_AData(void) //´¦ÀíÄ£ÄâÖµÊı¾İ
+void Deal_Usart_AData(void) //å¤„ç†æ¨¡æ‹Ÿå€¼æ•°æ®
 {
 	//$A,x1:1000,x2:3450,x3:40,x4:450,x5:110,x6:4096,x7:780,x8:80#
 	
-	char* strArray[10];//Ö¸ÕëÊı×é ³¤¶È¸ù¾İ·Ö¸îºÅ¶¨Òå  char 1×Ö½Ú   char* 4×Ö½Ú
+	char* strArray[10];//æŒ‡é’ˆæ•°ç»„ é•¿åº¦æ ¹æ®åˆ†å‰²å·å®šä¹‰  char 1å­—èŠ‚   char* 4å­—èŠ‚
 	char* strArraytemp[2];
 	char str_temp[Package_size] = {'\0'};
-	char mystr_temp[8][10] = {'\0'}; //ÁÙÊ±±¸·İ
+	char mystr_temp[8][10] = {'\0'}; //ä¸´æ—¶å¤‡ä»½
 	
 	
 	if(new_package[1]!='A')
 	{
-		return; //´Ë°üÊı¾İ²»ÊÇÄ£ÄâÖµÊı¾İ
+		return; //æ­¤åŒ…æ•°æ®ä¸æ˜¯æ¨¡æ‹Ÿå€¼æ•°æ®
 	}
 	char *end = memchr(new_package, '#', Package_size);
 	if (end == NULL) return;
@@ -170,19 +170,19 @@ void Deal_Usart_AData(void) //´¦ÀíÄ£ÄâÖµÊı¾İ
 	memcpy(str_temp, new_package, length);
 	str_temp[length] = '\0';
 	
-	splitString(strArray,str_temp, ", ");//ÒÔ¶ººÅÇĞ¸î
+	splitString(strArray,str_temp, ", ");//ä»¥é€—å·åˆ‡å‰²
 	
-	 //±éÀúÊı×é
+	 //éå†æ•°ç»„
     for (int i = 0; i < IR_Num; i++)
     {
     	  strcpy(mystr_temp[i],strArray[i]);
     	  splitString(strArraytemp,mystr_temp[i], ": ");
 				IR_Data_Anglo[i] = atoi(strArraytemp[0]);
     }
-		memset(new_package,0,Package_size);//Çå³ı¾ÉÊı¾İ
+		memset(new_package,0,Package_size);//æ¸…é™¤æ—§æ•°æ®
 		
-		memset(strArray,0,sizeof(strArray)); //Êı×éÖ¸ÕëÇå0
-		memset(strArraytemp,0,sizeof(strArraytemp));//Êı×éÖ¸ÕëÇå0
+		memset(strArray,0,sizeof(strArray)); //æ•°ç»„æŒ‡é’ˆæ¸…0
+		memset(strArraytemp,0,sizeof(strArraytemp));//æ•°ç»„æŒ‡é’ˆæ¸…0
   
 }
 

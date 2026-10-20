@@ -61,6 +61,22 @@ cmake --build --preset Debug
 
 产物为 `build/Debug/print_Eight_model_IO.elf`、`.hex` 和 `.map`。Release 构建使用 `cmake --preset Release`、`cmake --build --preset Release`。
 
+## CLion 编译、J-Link 下载与调试
+
+右上角运行配置下拉框提供三个入口，构建配置选择 `Debug`：
+
+| 配置 | 操作 | 行为 |
+| --- | --- | --- |
+| `编译 Debug` | 点击构建锤子或运行 ▶ | 只编译固件，不连接开发板。 |
+| `编译 + 下载` | 点击运行 ▶ | 先编译当前 Debug 目标，再下载固件并复位运行。 |
+| `编译 + 下载 + 调试` | 点击调试 🐞 | 先编译、下载，再复位暂停并进入调试；可设置断点、单步和查看变量。 |
+
+两个下载入口都使用 CLion 原生 `OpenOCD Download & Run` 配置，加载 `tools/clion-jlink.cfg`。下载文件由 CLion 根据当前构建目标确定，避免使用其他构建目录中的旧固件。底层参数在 `j-link.cfg` 中统一设置：J-Link USB 序列号 `123456`、SWD `4000 kHz`（4 MHz，已验证连接）、调试端口 ID `0x6ba02477`。
+
+CLion 的“设置 → 构建、执行、部署 → 嵌入式开发 → OpenOCD 位置”应为 `/home/eris/.local/opt/mspm0-openocd-jlink/bin/openocd`。系统自带的 `/usr/bin/openocd` 不是本次验证使用的版本。若配置尚未刷新，重新打开工程或重启 CLion 后使用。
+
+`tools/clion-jlink.cfg` 本身不会触发下载，由 CLion 控制下载时机。终端直接执行 `openocd -f j-link.cfg` 则仍会编程、校验、复位运行并退出。下载和调试不能同时占用同一只 J-Link，启动另一个操作前先停止当前调试会话。
+
 ## Keil 构建
 
 当前 FreeRTOS 接入已在 GCC/CMake 构建下验证。`keil/print_Eight_model_IO.uvprojx` 仍保留为历史裸机工程，尚未加入 FreeRTOS 内核源文件和 Cortex-M0+ 移植层，不应直接用于当前版本。

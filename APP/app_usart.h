@@ -3,13 +3,13 @@
 
 #include <stdint.h>
 
-#define IR_Num 8 //Ì½Í·ÊıÁ¿
+#define IR_Num 8 //æ¢å¤´æ•°é‡
 
 
 extern uint8_t IR_Data_number[];
 extern uint16_t IR_Data_Anglo[];
-extern uint8_t g_Amode_Data ;//Ä£ÄâĞÍ±êÖ¾
-extern uint8_t g_Dmode_Data ;//Êı×ÖĞÍ±êÖ¾
+extern uint8_t g_Amode_Data ;//æ¨¡æ‹Ÿå‹æ ‡å¿—
+extern uint8_t g_Dmode_Data ;//æ•°å­—å‹æ ‡å¿—
 
 void Deal_IR_Usart(uint8_t rxtemp);
 void Deal_Usart_Data(void);

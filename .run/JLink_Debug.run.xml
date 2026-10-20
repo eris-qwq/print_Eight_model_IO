@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="编译 + 下载 + 调试" type="com.jetbrains.cidr.embedded.openocd.conf.type" factoryName="com.jetbrains.cidr.embedded.openocd.conf.factory" version="1" PROJECT_NAME="print_Eight_model_IO" TARGET_NAME="print_Eight_model_IO" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="print_Eight_model_IO" RUN_TARGET_NAME="print_Eight_model_IO">
+    <openocd version="1" board-config="$PROJECT_DIR$/tools/clion-jlink.cfg" gdb-port="3333" telnet-port="4444" reset-type="HALT" download-type="ALWAYS">
+      <debugger kind="GDB" isBundled="true" />
+    </openocd>
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
